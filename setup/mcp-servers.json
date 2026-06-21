@@ -6,42 +6,27 @@
       "command": "uvx",
       "args": ["markitdown-mcp"],
       "_install": "pip install uv  # uv incluye uvx",
-      "_uso": "Convierte PDF, Word, Excel, PowerPoint, imágenes a Markdown. Usado por el CEO para procesar archivos."
+      "_uso": "Convierte PDF, Word, Excel, PowerPoint, imágenes a Markdown. Usado por el TPM para procesar archivos."
     },
-    "microsoft-learn": {
-      "type": "http",
-      "url": "https://learn.microsoft.com/api/mcp",
-      "_install": "Sin instalación — HTTP directo",
-      "_uso": "Documentación oficial de Microsoft y Azure. Útil para el tech-lead."
-    },
-    "notion": {
-      "type": "http",
-      "url": "https://mcp.notion.com/mcp",
-      "_install": "Sin instalación — HTTP directo",
-      "_auth": "oauth",
-      "_uso": "Acceso a workspaces de Notion. Útil para business-lead y CRM."
-    },
-    "rxresume": {
-      "type": "http",
-      "url": "https://rxresu.me/mcp",
-      "_install": "Sin instalación — HTTP directo",
-      "_auth": "oauth",
-      "_uso": "Gestión de CVs en Reactive Resume. Útil para agent-specialist-hr-ats si lo creas."
+    "nvd-cve": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "nvd-cve-mcp-server"],
+      "_install": "Requiere Node.js instalado (incluye npx)",
+      "_uso": "Consulta vulnerabilidades y detalles de CVEs desde la base de datos NVD. Esencial para agent-WAPT y agent-RED."
     }
   },
   "_plugins_via_claude_code": {
     "_instrucciones": "Instala estos desde el marketplace de Claude Code con: claude plugin install <nombre>",
-    "playwright": "npx @playwright/mcp@latest — automatización de browser, scraping, LinkedIn",
     "github": "https://api.githubcopilot.com/mcp/ — acceso a repos, commits, PRs, issues",
-    "context7": "npx @upstash/context7-mcp — documentación de librerías actualizada",
     "chrome-devtools": "npx chrome-devtools-mcp@1.1.1 — DevTools del navegador"
   },
   "_plugins_oauth_claude_ai": {
     "_instrucciones": "Estos se conectan desde claude.ai > Settings > Integrations",
     "google-drive": "Acceso a archivos en Drive",
-    "gmail": "Lectura y redacción de emails",
-    "google-calendar": "Gestión de calendario — requerido por wellness-lead",
-    "canva": "Diseño y assets visuales — útil para business-lead",
+    "gmail": "Lectura y redacción de emails — usado por agent-EM para comunicación con clientes",
+    "google-calendar": "Gestión de calendario",
+    "canva": "Diseño y assets visuales",
     "microsoft-365": "Outlook, Teams, SharePoint"
   }
 }

@@ -1,20 +1,19 @@
 # Claude Multi-Agent Template
 
-Sistema multi-agente para Claude Code con arquitectura CEO → Leads → Specialists. Copia esto a `~/.claude/` y tendrás un orquestador completo que rutea tareas por dominio automáticamente.
+Sistema multi-agente para Claude Code con arquitectura TPM + especialistas por dominio. Copia esto a `~/.claude/` y tendrás orquestación automática que rutea tareas según el contexto.
 
 ---
 
 ## Arquitectura
 
 ```
-CEO (orquestador)
-├── tech-lead        → java-specialist, python-specialist, ui-ux-specialist, seguridad-specialist, planificador-specialist, memoria-specialist
-├── business-lead    → contratos-mx-specialist
-├── finance-lead     → [tus skills de parseo bancario]
-└── wellness-lead    → nutricion-specialist*, fuerza-specialist*, movilidad-specialist*, calendario-specialist*
+/agent-TPM   → desarrollo, scripting, automatización, arquitectura
+/agent-WAPT  → web application penetration testing
+/agent-RED   → red team, active directory, internal network
+/agent-EM    → engagement management, cronogramas, comunicación con clientes
 ```
 
-> `*` Los specialists de wellness no están incluidos en este template — son altamente personales. El wellness-lead funciona sin ellos usando conocimiento general.
+El TPM internamente puede rutear a WAPT, RED o EM si la tarea toca esos dominios.
 
 ---
 
@@ -22,12 +21,12 @@ CEO (orquestador)
 
 ```bash
 # 1. Clona el repo
-git clone https://github.com/[usuario]/claude-agents-template.git
+git clone https://github.com/emiyelbarto/claude-agents-template.git
 
 # 2. Copia a ~/.claude
 cp -r claude-agents-template/commands/* ~/.claude/commands/
 cp -r claude-agents-template/agents/* ~/.claude/agents/
-cp claude-agents-template/CLAUDE.md ~/.claude/CLAUDE.md  # cuidado: sobreescribe el tuyo
+cp claude-agents-template/CLAUDE.md ~/.claude/CLAUDE.md  # cuidado: sobreescribe el tuyo, haz backup antes
 
 # 3. Instala los MCPs (ver sección MCPs abajo)
 
@@ -44,30 +43,12 @@ cp claude-agents-template/CLAUDE.md ~/.claude/CLAUDE.md  # cuidado: sobreescribe
 # markitdown — convierte PDF, Word, Excel, imágenes a Markdown
 claude mcp add markitdown --transport stdio -- uvx markitdown-mcp
 
-# playwright — automatización de browser (LinkedIn, scraping, formularios)
-claude plugin install playwright
+# nvd-cve — consulta CVEs desde la base de datos NVD
+claude mcp add nvd-cve --transport stdio -- npx -y nvd-cve-mcp-server
 
 # github — acceso a repos, commits, PRs
 claude plugin install github
-
-# context7 — documentación de librerías actualizada
-claude plugin install context7
 ```
-
-### MCPs HTTP (sin instalación local)
-
-```bash
-# Microsoft Learn — docs oficiales de Microsoft y Azure
-claude mcp add microsoft-learn --transport http https://learn.microsoft.com/api/mcp
-
-# RxResume — gestión de CVs (si vas a usar el agente HR-ATS)
-claude mcp add rxresume --transport http https://rxresu.me/mcp
-
-# Notion — workspaces y bases de datos
-claude mcp add notion --transport http https://mcp.notion.com/mcp
-```
-
-> Los MCPs HTTP con OAuth (RxResume, Notion) pedirán autenticación en el navegador la primera vez que los uses.
 
 ### MCPs via claude.ai (OAuth en el navegador)
 
@@ -76,17 +57,17 @@ Estos se conectan desde [claude.ai](https://claude.ai) → **Settings → Integr
 | MCP | Uso |
 |-----|-----|
 | Google Drive | Acceso a archivos en Drive |
-| Gmail | Lectura y redacción de emails |
-| Google Calendar | Requerido por `wellness-lead` para agendar workouts |
-| Canva | Assets visuales para `business-lead` |
+| Gmail | Lectura y redacción de emails — agent-EM para comunicación con clientes |
+| Google Calendar | Gestión de calendario |
+| Canva | Diseño y assets visuales |
 | Microsoft 365 | Outlook, Teams, SharePoint |
 
 ### Verificar instalación
 
 ```bash
 claude mcp list
-# Deberías ver: markitdown ✔, microsoft-learn ✔, rxresume ✔, notion ✔
-# playwright, github, context7 aparecen como plugins
+# Deberías ver: markitdown ✔, nvd-cve ✔
+# github aparece como plugin
 ```
 
 ---
@@ -97,18 +78,14 @@ Busca y reemplaza estos placeholders en todos los archivos:
 
 | Placeholder | Reemplazar con |
 |-------------|---------------|
-| `[TU_NOMBRE]` | Tu nombre |
-| `[TU_EMPRESA]` | El nombre de tu empresa o proyecto principal |
-| `[TU_PROYECTO]` | Tu proyecto de software actual |
+| `[TU_NOMBRE]` | Tu nombre completo |
 | `[TU_VAULT]` | Nombre de tu vault de Obsidian (si usas ObsidianMind) |
-| `[TU_CARPETA_SALUD]` | Path a tu carpeta de datos fitness, ej: `~/Personal/Fitness` |
-| `[TU_BANCO_1]`, `[TU_BANCO_2]` | Nombres de tus bancos en `agent-lead-finance.md` |
-| `[TU_PATH]` | Tu username de macOS, ej: `juangarcia` → `-Users-juangarcia` |
+| `[TU_PATH]` | Tu username, ej: `juangarcia` → `-Users-juangarcia` |
 
 ```bash
 # Reemplazar en todos los archivos de una vez (macOS):
 find ~/.claude/commands ~/.claude/agents -name "*.md" -exec \
-  sed -i '' 's/\[TU_NOMBRE\]/Juan García/g' {} \;
+  sed -i '' 's/\[TU_NOMBRE\]/Tu Nombre Aqui/g' {} \;
 ```
 
 ---
@@ -126,32 +103,32 @@ Los agentes usan `qmd` para búsqueda semántica en un vault de Obsidian. Sin es
 
 ## Uso
 
-Una vez instalado, escribe cualquier tarea en Claude Code y el CEO la ruteará automáticamente:
+Una vez instalado, escribe cualquier tarea en Claude Code y el agente correcto toma control:
 
 ```
-# Ejemplos — el CEO decide a quién delegar:
+# El CLAUDE.md activa el agente adecuado según el dominio:
 
-"Arregla el bug en el servicio de pagos"
-→ CEO → tech-lead → java-specialist
+"Necesito un script para automatizar la recolección de logs del servidor"
+→ /agent-TPM → resuelve directamente
 
-"Revisa este contrato antes de firmarlo"
-→ CEO → business-lead → contratos-mx-specialist
+"Revisa el cronograma de la auditoría y responde al correo del cliente con las fechas acordadas"
+→ /agent-EM → resuelve directamente
 
-"¿Cuánto gasté este mes?"
-→ CEO → finance-lead → [tu skill de banco]
+"Ejecuta un reconocimiento web inicial sobre el nuevo alcance e identifica posibles vectores de ataque"
+→ /agent-WAPT → resuelve directamente
 
-"Dame mi plan de entrenamiento para hoy"
-→ CEO → wellness-lead → fuerza-specialist + nutricion-specialist + calendario-specialist
+"Genera el plan de pruebas para evaluar la seguridad de la red interna de este Directorio Activo"
+→ /agent-RED → resuelve directamente
 
-"Diseña la landing page de mi SaaS"
-→ CEO → tech-lead → ui-ux-specialist
+"Lanza una auditoría completa combinada web e interna"
+→ /agent-TPM → ruteó a agent-WAPT + agent-RED en paralelo
 ```
 
 ---
 
-## Agregar specialists propios
+## Agregar agents propios
 
-Usa el comando `/agent-creator` en Claude Code — él te guía para crear un nuevo specialist con el formato correcto y lo integra automáticamente en la jerarquía.
+Usa el comando `/agent-creator` en Claude Code — te guía para crear un nuevo agente con el formato correcto y lo integra automáticamente en la jerarquía.
 
 ```
 # En Claude Code:
@@ -164,26 +141,17 @@ Usa el comando `/agent-creator` en Claude Code — él te guía para crear un nu
 
 ```
 ~/.claude/
-├── CLAUDE.md                          # Instrucciones globales — activa el CEO automáticamente
+├── CLAUDE.md                          # Instrucciones globales — activa el agente correcto automáticamente
 ├── commands/
-│   ├── agent-CEO.md                   # Orquestador
-│   ├── agent-lead-tech.md             # Lead de desarrollo
-│   ├── agent-lead-business.md         # Lead de negocio
-│   ├── agent-lead-finance.md          # Lead de finanzas
-│   ├── agent-lead-wellness.md         # Lead de salud/fitness
-│   ├── agent-specialist-java.md
-│   ├── agent-specialist-python.md
-│   ├── agent-specialist-ui-ux.md
-│   ├── agent-specialist-seguridad.md
-│   ├── agent-specialist-planificador.md
-│   ├── agent-specialist-memoria.md
-│   └── agent-specialist-contratos-mx.md
+│   ├── agent-TPM.md                   # Orquestador y Technical Program Manager
+│   ├── agent-WAPT.md                  # Senior Web Application Penetration Tester
+│   ├── agent-RED.md                   # Senior Red Team Penetration Tester
+│   └── agent-EM.md                    # Engagement Manager
 └── agents/
-    ├── CEO/global-memory.md           # Memoria persistente del CEO
-    ├── tech-lead/global-memory.md
-    ├── business-lead/global-memory.md
-    ├── finance-lead/global-memory.md
-    └── wellness-lead/global-memory.md
+    ├── TPM/global-memory.md           # Memoria persistente del TPM
+    ├── WAPT/global-memory.md          # Memoria persistente del WAPT
+    ├── RED/global-memory.md           # Memoria persistente del RED
+    └── EM/global-memory.md            # Memoria persistente del EM
 ```
 
 ---
@@ -199,9 +167,3 @@ Cada agente tiene un `global-memory.md` donde registra aprendizajes entre sesion
 Estos archivos crecen solos — cada agente los actualiza al terminar una tarea.
 
 Para memoria a nivel de proyecto, los agentes buscan `{proyecto}/.claude/agents/{nombre}/memory.md`. Si no existe, lo crean.
-
----
-
-## Contribuciones
-
-PRs bienvenidos — especialmente nuevos specialists o mejoras a los leads existentes.

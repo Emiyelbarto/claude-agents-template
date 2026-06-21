@@ -1,2 +1,2 @@
-# Finance Lead — Memoria Global
+# WAPT — Memoria Global
 Aprendizajes cross-project. Formato: `- YYYY-MM-DD: [descripción]`
