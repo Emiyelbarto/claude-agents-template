@@ -14,6 +14,21 @@
       "args": ["-y", "nvd-cve-mcp-server"],
       "_install": "Requiere Node.js instalado (incluye npx)",
       "_uso": "Consulta vulnerabilidades y detalles de CVEs desde la base de datos NVD. Esencial para agent-WAPT y agent-RED."
+    },
+    "burpsuite": {
+      "type": "sse",
+      "url": "http://127.0.0.1:9876/sse",
+      "_install": "Instalar extensión 'MCP Server' desde BApp Store en Burp Suite Pro. En Burp: pestaña MCP → Install to Claude Desktop para generar la config. Burp debe estar activo antes de conectar.",
+      "_ref": "https://github.com/PortSwigger/mcp-server",
+      "_uso": "Control de Burp Suite desde Claude: proxy history, envío de requests, Collaborator, Repeater, Intruder. Esencial para agent-WAPT."
+    },
+    "metasploit": {
+      "type": "stdio",
+      "command": "msfmcpd",
+      "args": [],
+      "_install": "Incluido en Metasploit Framework v6.4+. Requiere 'msfdb init' y base de datos activa. Alternativa comunitaria con más herramientas: https://github.com/GH05TCREW/MetasploitMCP",
+      "_ref": "https://docs.metasploit.com/docs/using-metasploit/other/how-to-use-metasploit-mcp-server.html",
+      "_uso": "Búsqueda de módulos por CVE o nombre, consulta de hosts y vulnerabilidades en la DB de Metasploit. Esencial para agent-RED. Nota: versión oficial read-only — para ejecución de módulos usar MetasploitMCP comunitario."
     }
   },
   "_plugins_via_claude_code": {

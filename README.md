@@ -46,8 +46,21 @@ claude mcp add markitdown --transport stdio -- uvx markitdown-mcp
 # nvd-cve — consulta CVEs desde la base de datos NVD
 claude mcp add nvd-cve --transport stdio -- npx -y nvd-cve-mcp-server
 
+# metasploit — acceso a módulos, hosts y vulnerabilidades (Metasploit Framework v6.4+)
+# Requiere: msfdb init && msfdb start
+claude mcp add metasploit --transport stdio -- msfmcpd
+
 # github — acceso a repos, commits, PRs
 claude plugin install github
+```
+
+### Burp Suite MCP (requiere Burp Suite Pro)
+
+```bash
+# 1. Instalar extensión desde BApp Store: "MCP Server" (by PortSwigger)
+# 2. En Burp: pestaña MCP → "Install to Claude Desktop"
+#    Esto genera la config automáticamente apuntando a http://127.0.0.1:9876/sse
+# Ref: https://github.com/PortSwigger/mcp-server
 ```
 
 ### MCPs via claude.ai (OAuth en el navegador)
