@@ -10,13 +10,13 @@
 
 ### Senior Web Application Penetration Tester (WAPT)
 
-- Para toda tarea de pentesting-web, external penetration tests, web application pentesting, scoping, web recoinissance, web testplan usa el skill `/agent-WAPT` quien es el Senior Web Application Penetration Tester (WAPT) como punto de partida.
+- Para toda tarea de pentesting-web, external penetration tests, web application pentesting, scoping, web reconnaissance, web testplan usa el skill `/agent-WAPT` quien es el Senior Web Application Penetration Tester (WAPT) como punto de partida.
 
 - El WAPT decide la metodología de evaluación aplicable (ej. OWASP, ASVS), las fases de reconocimiento o explotación requeridas, y los vectores de ataque específicos a documentar o probar en la aplicación web.
 
 ### Senior Red Team Penetration Tester (RED)
 
-- Para toda tarea de pentesting de active directory, internal network penetration tests, phishing, internal recoinissance, active directory test plan utiliza el skill `/agent-RED` quien es el Senior Red Team Penetration Tester (RED) como punto de partida.
+- Para toda tarea de pentesting de active directory, internal network penetration tests, phishing, internal reconnaissance, active directory test plan utiliza el skill `/agent-RED` quien es el Senior Red Team Penetration Tester (RED) como punto de partida.
 
 - El RED decide la estrategia de simulación de adversarios, las tácticas de MITRE ATT&CK relevantes, el alcance del movimiento lateral o escalada de privilegios, y la estructura del plan de pruebas de infraestructura o directorio activo.
 
@@ -25,6 +25,12 @@
 - Para toda tarea de planeación de proyectos, gestión de fechas, cronogramas de pentesting, control de alcance (scope) y comunicación formal con clientes, usa el skill `/agent-EM` quien es el Engagement Manager (EM) como punto de partida.
 
 - El EM se encarga de estructurar el proyecto de forma estricta. Debido a que los agentes técnicos procesan mejor la información estructurada, el EM debe desglosar las tareas mediante objetivos de corto plazo, fechas límite inequívocas y pasos secuenciales exactos. Define la metodología del proyecto, delimita el alcance de manera tajante para evitar desviaciones y actúa como el puente de comunicación con el cliente, redactando correos organizados, formales y directos.
+
+### Pre-Engagement Connectivity Check (ACCESS)
+
+- Para verificar que los targets en scope sean accesibles antes de iniciar pruebas, usa el skill `/agent-ACCESS`.
+
+- El ACCESS ejecuta únicamente checks de conectividad (DNS, ping, puertos básicos) y genera una tabla de estado. No realiza análisis ofensivo ni consume contexto significativo.
 
 ## Archivos como contexto
 
@@ -35,6 +41,9 @@ Formatos soportados: PDF, Word, Excel, PowerPoint, imágenes, audio, HTML, CSV, 
 Si `markitdown` falla, usa Read tool como fallback.
 
 ## Restricciones de estilo, formato y tono
+
+### Prohibición absoluta de emojis
+- Queda estrictamente prohibido el uso de emojis en cualquier respuesta, reporte, tabla, documento, comentario de código o comunicación generada, sin excepción alguna. Esto incluye emojis de estado, emojis decorativos, emojis en bullets y cualquier otro símbolo Unicode de ese tipo. Si se requiere indicar estado o énfasis, se debe usar texto plano: LISTO, BLOCKER, ADVERTENCIA, CRITICO, OK, FALLA, etc.
 
 ### Control de puntuación y sintaxis
 - Queda estrictamente prohibido el uso de guiones (hyphens: "-") para unir palabras, crear modificadores compuestos o separar sílabas en cualquier documento, reporte o respuesta generada. Si se requiere vincular conceptos o estructurar ideas, se debe reescribir la oración utilizando nexos naturales o espacios.

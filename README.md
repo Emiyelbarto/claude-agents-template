@@ -7,13 +7,14 @@ Sistema multi-agente para Claude Code con arquitectura TPM + especialistas por d
 ## Arquitectura
 
 ```
-/agent-TPM   → desarrollo, scripting, automatización, arquitectura
-/agent-WAPT  → web application penetration testing
-/agent-RED   → red team, active directory, internal network
-/agent-EM    → engagement management, cronogramas, comunicación con clientes
+/agent-TPM    → desarrollo, scripting, automatización, arquitectura
+/agent-WAPT   → web application penetration testing
+/agent-RED    → red team, active directory, internal network
+/agent-EM     → engagement management, cronogramas, comunicación con clientes
+/agent-ACCESS → preflight check: verifica conectividad de targets antes de iniciar pruebas
 ```
 
-El TPM internamente puede rutear a WAPT, RED o EM si la tarea toca esos dominios.
+El TPM internamente puede rutear a WAPT, RED, EM o ACCESS si la tarea toca esos dominios.
 
 ---
 
@@ -54,7 +55,7 @@ claude mcp add metasploit --transport stdio -- msfmcpd
 claude plugin install github
 ```
 
-### Burp Suite MCP (requiere Burp Suite Pro)
+### Burp Suite MCP (Community y Pro)
 
 ```bash
 # 1. Instalar extensión desde BApp Store: "MCP Server" (by PortSwigger)
@@ -79,7 +80,7 @@ Estos se conectan desde [claude.ai](https://claude.ai) → **Settings → Integr
 
 ```bash
 claude mcp list
-# Deberías ver: markitdown ✔, nvd-cve ✔
+# Deberías ver: markitdown, nvd-cve, metasploit
 # github aparece como plugin
 ```
 
@@ -135,6 +136,9 @@ Una vez instalado, escribe cualquier tarea en Claude Code y el agente correcto t
 
 "Lanza una auditoría completa combinada web e interna"
 → /agent-TPM → ruteó a agent-WAPT + agent-RED en paralelo
+
+"Verifica que todos los targets del scope estén accesibles antes de empezar"
+→ /agent-ACCESS → tabla de conectividad en segundos
 ```
 
 ---
@@ -159,12 +163,14 @@ Usa el comando `/agent-creator` en Claude Code — te guía para crear un nuevo 
 │   ├── agent-TPM.md                   # Orquestador y Technical Program Manager
 │   ├── agent-WAPT.md                  # Senior Web Application Penetration Tester
 │   ├── agent-RED.md                   # Senior Red Team Penetration Tester
-│   └── agent-EM.md                    # Engagement Manager
+│   ├── agent-EM.md                    # Engagement Manager
+│   └── agent-ACCESS.md               # Intern de pre-engagement — preflight check
 └── agents/
     ├── TPM/global-memory.md           # Memoria persistente del TPM
     ├── WAPT/global-memory.md          # Memoria persistente del WAPT
     ├── RED/global-memory.md           # Memoria persistente del RED
-    └── EM/global-memory.md            # Memoria persistente del EM
+    ├── EM/global-memory.md            # Memoria persistente del EM
+    └── ACCESS/global-memory.md        # Memoria persistente del ACCESS
 ```
 
 ---
