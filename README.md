@@ -24,14 +24,22 @@ El TPM internamente puede rutear a WAPT, RED, EM o ACCESS si la tarea toca esos 
 # 1. Clona el repo
 git clone https://github.com/emiyelbarto/claude-agents-template.git
 
-# 2. Copia a ~/.claude
+# 2. Backup de lo que ya existe en ~/.claude
+BACKUP_DIR=~/.claude-backup-$(date +%Y%m%d-%H%M%S)
+mkdir -p "$BACKUP_DIR"
+[ -f ~/.claude/CLAUDE.md ]    && cp ~/.claude/CLAUDE.md "$BACKUP_DIR/"
+[ -d ~/.claude/commands ]     && cp -r ~/.claude/commands "$BACKUP_DIR/"
+[ -d ~/.claude/agents ]       && cp -r ~/.claude/agents "$BACKUP_DIR/"
+echo "Backup guardado en $BACKUP_DIR"
+
+# 3. Copia a ~/.claude
 cp -r claude-agents-template/commands/* ~/.claude/commands/
 cp -r claude-agents-template/agents/* ~/.claude/agents/
-cp claude-agents-template/CLAUDE.md ~/.claude/CLAUDE.md  # cuidado: sobreescribe el tuyo, haz backup antes
+cp claude-agents-template/CLAUDE.md ~/.claude/CLAUDE.md
 
-# 3. Instala los MCPs (ver sección MCPs abajo)
+# 4. Instala los MCPs (ver sección MCPs abajo)
 
-# 4. Personaliza los placeholders (ver sección Personalización)
+# 5. Personaliza los placeholders (ver sección Personalización)
 ```
 
 ---
